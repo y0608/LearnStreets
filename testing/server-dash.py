@@ -1,3 +1,6 @@
+# https://plotly.com/python/maps/
+
+
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
@@ -7,22 +10,23 @@ app = Dash(__name__)
 app.layout = html.Div([
     html.H4('Guess the neighbourhood'),
     html.P("Select a candidate:"),
-    # dcc.RadioItems(
-    #     id='candidate', 
-    #     options=["Joly", "Coderre", "Bergeron"],
-    #     value="Coderre",
-    #     inline=True
-    # ),
+    dcc.RadioItems(
+        id='candidate', 
+        options=["Joly", "Coderre", "Bergeron"],
+        value="Coderre",
+        inline=True
+    ),
     dcc.Graph(id="graph"),
 ])
 
 
 @app.callback(
     Output("graph", "figure"), 
-    Input("candidate", "value"))
+    Input("candidate", "value")
+)
 
 def display_choropleth(candidate):
-    df = px.data.wind() # replace with your own data source
+    df = px.data.election() # replace with your own data source
     geojson = px.data.election_geojson()
     fig = px.choropleth(
         df, geojson=geojson, color=candidate,
